@@ -21,3 +21,5 @@ const sendEmail = (to, subject, text) => {
 
     return transporter.sendMail(mailOptions);
 }
+
+module.exports = { sendEmail };

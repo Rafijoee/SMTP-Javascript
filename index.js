@@ -1,30 +1,19 @@
-const nodemailer = require('nodemailer');
-require('dotenv').config();
-const JWT_SECRET = process.env.JWT_SECRET;
+require("dotenv").config();
+
+const express = require("express");
+const app = express();
+const port = process.env.PORT || 3000;
+// const cookieParser = require("cookie-parser");
+// const bodyParser = require("body-parser");
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 
-const transporter = nodemailer.createTransport({
-    host: 'smtp.gmail.com',
-    port: 465, // gunakan 587 jika menggunakan secure: false
-    secure: true, // true untuk 465, false untuk lainnya
-    auth : {
-        user: process.env.EMAIL,
-        pass: process.env.PASSWORD
-    }
+const authRoutes = require("./routes/authRoutes");
+
+app.use('/api/v1', authRoutes);
+
+app.listen(port, () => {
+    console.log(`Server is running on port ${port}`);
 });
 
-const mailOptions = {
-    from: process.env.EMAIL,
-    to: 'ragijoe43@gmail.com',
-    subject: 'Sending Email using Node.js',
-    text: 'That was easy!',
-    html: '<h1>Welcome</h1><p>That was easy!</p>'
-};
-
-transporter.sendMail(mailOptions, function(error, info){
-    if(error){
-        console.log(error, "ini errornyaaa");
-    }else{
-        console.log('Email sent: ' + info.response);
-    }
-});
